@@ -5,6 +5,7 @@ import com.example.LoanEligibilityChecker.Dto.AuthResponseDto;
 import com.example.LoanEligibilityChecker.Dto.ResponseDto;
 import com.example.LoanEligibilityChecker.Dto.UserRequestDto;
 import com.example.LoanEligibilityChecker.Entity.User;
+import com.example.LoanEligibilityChecker.Exception.InvalidCredentials;
 import com.example.LoanEligibilityChecker.Exception.ResourceAlreadyExistEx;
 import com.example.LoanEligibilityChecker.Repository.UserRepository;
 import com.example.LoanEligibilityChecker.Security.JwtUtil;
@@ -67,7 +68,7 @@ public class UserService {
 
 
         }catch (Exception e){
-            throw new RuntimeException("Invalid username or password");
+            throw new InvalidCredentials("Invalid username or password");
         }
 
         User user=userRepository.findByUserName(authRequestDto.getUserName()).get();

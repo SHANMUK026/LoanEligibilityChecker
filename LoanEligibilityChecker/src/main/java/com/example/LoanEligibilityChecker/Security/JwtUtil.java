@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private final String JWT_SECRET = "secretsecretsecretsecretsecretsecretsecret";
+    private final String JWT_SECRET = "secretsecretsecretsecretsecretsecretsecreershanmukhershanmukhtusershanmukh";
     private final Long JWT_EXPIRATION_MS = 10L*24*60*60*1000;
 
 
