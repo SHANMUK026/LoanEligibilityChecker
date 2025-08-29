@@ -28,6 +28,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceAlreadyExistEx.class)
     public ResponseEntity<ErrorResponseDto> handleResourceAlready(Exception ex, HttpServletRequest request){
         return buildError(ex, HttpStatus.BAD_REQUEST, request.getRequestURI());
+    }
 
+    @ExceptionHandler(InvalidCredentials.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidCredentials(Exception ex, HttpServletRequest request){
+        return buildError(ex, HttpStatus.UNAUTHORIZED, request.getRequestURI());
     }
 }

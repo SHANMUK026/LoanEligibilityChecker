@@ -1,5 +1,7 @@
 package com.example.LoanEligibilityChecker.Controller;
 
+import com.example.LoanEligibilityChecker.Dto.AuthRequestDto;
+import com.example.LoanEligibilityChecker.Dto.AuthResponseDto;
 import com.example.LoanEligibilityChecker.Dto.ResponseDto;
 import com.example.LoanEligibilityChecker.Dto.UserRequestDto;
 import com.example.LoanEligibilityChecker.Repository.UserRepository;
@@ -21,5 +23,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> registerUser(@RequestBody UserRequestDto requestDto) {
         return new ResponseEntity<>(userService.registerUser(requestDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDto> loginUser(@RequestBody AuthRequestDto requestDto){
+        return ResponseEntity.ok(userService.loginUser(requestDto));
     }
 }

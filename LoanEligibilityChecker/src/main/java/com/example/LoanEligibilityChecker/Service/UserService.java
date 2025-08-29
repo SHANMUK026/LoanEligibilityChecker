@@ -1,11 +1,16 @@
 package com.example.LoanEligibilityChecker.Service;
 
+import com.example.LoanEligibilityChecker.Dto.AuthRequestDto;
+import com.example.LoanEligibilityChecker.Dto.AuthResponseDto;
 import com.example.LoanEligibilityChecker.Dto.ResponseDto;
 import com.example.LoanEligibilityChecker.Dto.UserRequestDto;
 import com.example.LoanEligibilityChecker.Entity.User;
 import com.example.LoanEligibilityChecker.Exception.ResourceAlreadyExistEx;
 import com.example.LoanEligibilityChecker.Repository.UserRepository;
+import com.example.LoanEligibilityChecker.Security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +23,8 @@ public class UserService {
     private final BorrowerService borrowerService;
     private final LenderService lenderService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
     public ResponseDto registerUser(UserRequestDto userRequestDto) {
         Optional<User> userByName = userRepository.findByUserName(userRequestDto.getUserName());
@@ -46,6 +53,30 @@ public class UserService {
             lenderService.registerLender(userRequestDto.getLender(),savedUser);
         }
         return new ResponseDto("User registered successfully");
+    }
+
+
+    public AuthResponseDto loginUser(AuthRequestDto authRequestDto){
+
+
+        try{
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequestDto.getUserName(),authRequestDto.getPassword())
+            );
+
+
+        }catch (Exception e){
+            throw new RuntimeException("Invalid username or password");
+        }
+
+        User user=userRepository.findByUserName(authRequestDto.getUserName()).get();
+        String token=jwtUtil.generateJwtToken(user.getUserName());
+
+        return new AuthResponseDto(token, user.getRole());
+
+
+
     }
 
 }
