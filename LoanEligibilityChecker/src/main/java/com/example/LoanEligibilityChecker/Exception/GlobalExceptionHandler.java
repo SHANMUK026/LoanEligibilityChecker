@@ -34,4 +34,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleInvalidCredentials(Exception ex, HttpServletRequest request){
         return buildError(ex, HttpStatus.UNAUTHORIZED, request.getRequestURI());
     }
+
+    @ExceptionHandler(ResourceNotFoundEx.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceNotFoundEx(Exception ex, HttpServletRequest request){
+        return buildError(ex, HttpStatus.NOT_FOUND, request.getRequestURI());
+    }
 }

@@ -22,4 +22,8 @@ public class Borrower {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToOne(mappedBy = "borrower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private BorrowerRequest borrowerRequest;
+
 }

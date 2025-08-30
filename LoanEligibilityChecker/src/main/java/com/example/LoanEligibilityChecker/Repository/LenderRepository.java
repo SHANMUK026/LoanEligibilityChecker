@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface LenderRepository extends JpaRepository<Lender, Long> {
     Optional<Lender> findByLicenseNumber(String licenseNumber);
     Optional<Lender> findByCompanyName(String companyName);
+    Optional<Lender> findByUser_UserName(String userName);
 }
