@@ -20,7 +20,6 @@ public class BorrowerService {
                 .address(borrowerRequestDto.getAddress())
                 .user(user)
                 .build();
-
         borrowerRepository.save(borrower);
 
     }

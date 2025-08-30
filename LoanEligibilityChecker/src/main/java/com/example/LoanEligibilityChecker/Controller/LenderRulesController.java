@@ -1,12 +1,15 @@
 package com.example.LoanEligibilityChecker.Controller;
 
 import com.example.LoanEligibilityChecker.Dto.LenderRulesRequestDto;
+import com.example.LoanEligibilityChecker.Dto.LenderRulesResponseDto;
 import com.example.LoanEligibilityChecker.Dto.ResponseDto;
 import com.example.LoanEligibilityChecker.Service.LenderRulesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/lender_rules")
@@ -27,8 +30,8 @@ public class LenderRulesController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDto> getLenderRules(@PathVariable Long id) {
-        ResponseDto responseDto = lenderRulesService.getLenderRules(id);
+    public ResponseEntity<LenderRulesResponseDto> getLenderRules(@PathVariable Long id) {
+        LenderRulesResponseDto responseDto = lenderRulesService.getLenderRules(id);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
     
@@ -36,6 +39,11 @@ public class LenderRulesController {
     public ResponseEntity<Void> deleteLenderRules(@PathVariable Long id) {
         ResponseDto responseDto = lenderRulesService.deleteLenderRules(id);
         return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping
+    public List<LenderRulesResponseDto> getAllRules() {
+        return lenderRulesService.getAllLenderRules();
     }
 
 

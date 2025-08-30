@@ -1,6 +1,7 @@
 package com.example.LoanEligibilityChecker.Service;
 
 import com.example.LoanEligibilityChecker.Dto.LenderRulesRequestDto;
+import com.example.LoanEligibilityChecker.Dto.LenderRulesResponseDto;
 import com.example.LoanEligibilityChecker.Dto.ResponseDto;
 import com.example.LoanEligibilityChecker.Entity.Lender;
 import com.example.LoanEligibilityChecker.Entity.LenderRules;
@@ -11,7 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +26,10 @@ public class LenderRulesService {
 
         return lenderRepository.findByUser_UserName(username)
                 .orElseThrow(() -> new ResourceNotFoundEx("Lender not found with username: " + username));
-
     }
 
     public ResponseDto createLenderRules(LenderRulesRequestDto rulesRequestDto) {
-        Lender existingLender=getCurrentLender();
+        Lender existingLender = getCurrentLender();
 
         LenderRules lenderRules = LenderRules.builder()
                 .minimumSalary(rulesRequestDto.getMinimumSalary())
@@ -43,12 +44,12 @@ public class LenderRulesService {
                 .lender(existingLender)
                 .build();
 
-       LenderRules savedRule= lenderRulesRepository.save(lenderRules);
-       return new ResponseDto("Lender Rules created successfully with id: " + savedRule.getId());
-
+        LenderRules savedRule = lenderRulesRepository.save(lenderRules);
+        return new ResponseDto("Lender Rules created successfully with id: " + savedRule.getId());
     }
-    public ResponseDto updateLenderRules(Long id,LenderRulesRequestDto rulesRequestDto) {
-        Lender existingLender=getCurrentLender();
+
+    public ResponseDto updateLenderRules(Long id, LenderRulesRequestDto rulesRequestDto) {
+        Lender existingLender = getCurrentLender();
 
         LenderRules existingRules = lenderRulesRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundEx("Rules not found for lender: " + existingLender.getCompanyName()));
@@ -72,7 +73,7 @@ public class LenderRulesService {
     }
 
     public ResponseDto deleteLenderRules(Long id) {
-        Lender existingLender=getCurrentLender();
+        Lender existingLender = getCurrentLender();
         LenderRules existingRules = lenderRulesRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundEx("Rules not found with id: " + id));
 
@@ -84,11 +85,8 @@ public class LenderRulesService {
         return new ResponseDto("Lender Rules deleted successfully with id: " + id);
     }
 
-    public ResponseDto getLenderRules(Long id) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        Lender existingLender = lenderRepository.findByUser_UserName(username)
-                .orElseThrow(() -> new ResourceNotFoundEx("Lender not found with username: " + username));
+    public LenderRulesResponseDto getLenderRules(Long id) {
+        Lender existingLender = getCurrentLender();
 
         LenderRules existingRules = lenderRulesRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundEx("Rules not found with id: " + id));
@@ -97,6 +95,32 @@ public class LenderRulesService {
             throw new ResourceNotFoundEx("Rules with id: " + id + " does not belong to lender: " + existingLender.getCompanyName());
         }
 
-        return new ResponseDto("Lender Rules retrieved successfully with id: " + existingRules.getId());
+        return mapToDto(existingRules);
+    }
+
+    // NEW: get all rules for current lender
+    public List<LenderRulesResponseDto> getAllLenderRules() {
+        Lender existingLender = getCurrentLender();
+
+        List<LenderRules> rulesList = lenderRulesRepository.findAllByLender(existingLender);
+
+        return rulesList.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+
+    public LenderRulesResponseDto mapToDto(LenderRules lenderRules) {
+        LenderRulesResponseDto dto = new LenderRulesResponseDto();
+        dto.setMinimumSalary(lenderRules.getMinimumSalary());
+        dto.setMinimumLoanAmount(lenderRules.getMinimumLoanAmount());
+        dto.setMaximumLoanAmount(lenderRules.getMaximumLoanAmount());
+        dto.setInterestRate(lenderRules.getInterestRate());
+        dto.setMinimumCreditScore(lenderRules.getMinimumCreditScore());
+        dto.setMinimumAge(lenderRules.getMinimumAge());
+        dto.setMaximumAge(lenderRules.getMaximumAge());
+        dto.setEmploymentTypes(lenderRules.getEmploymentTypes());
+        dto.setRuleStatus(lenderRules.getRuleStatus());
+        return dto;
     }
 }
