@@ -3,6 +3,7 @@ package com.example.LoanEligibilityChecker.Entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "borrowers")
 @Builder
+@Data
 public class Borrower {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

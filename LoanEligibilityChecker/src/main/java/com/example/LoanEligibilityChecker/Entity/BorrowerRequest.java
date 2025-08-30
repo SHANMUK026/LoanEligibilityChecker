@@ -16,10 +16,6 @@ public class BorrowerRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String address;
     private Double loanAmount;
     private String loanPurpose;
     private String employmentStatus;

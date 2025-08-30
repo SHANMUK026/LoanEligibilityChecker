@@ -1,9 +1,11 @@
 package com.example.LoanEligibilityChecker.Dto;
 
+import jakarta.persistence.Id;
 import lombok.Data;
 
 @Data
-public class BorrowerReqRequestDto {
+public class BorrowerRequestResponseDto {
+    private Long id;
     private Double loanAmount;
     private String loanPurpose;
     private String employmentStatus;
