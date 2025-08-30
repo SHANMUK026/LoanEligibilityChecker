@@ -46,6 +46,11 @@ public class LenderRulesController {
         return lenderRulesService.getAllLenderRules();
     }
 
+        @GetMapping("/lender/{lenderId}")
+        public List<LenderRulesResponseDto> getRulesByLender(@PathVariable Long lenderId) {
+            return lenderRulesService.getAllRulesByLenderId(lenderId);
+        }
+    }
 
-}
+
 

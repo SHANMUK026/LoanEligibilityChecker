@@ -98,7 +98,6 @@ public class LenderRulesService {
         return mapToDto(existingRules);
     }
 
-    // NEW: get all rules for current lender
     public List<LenderRulesResponseDto> getAllLenderRules() {
         Lender existingLender = getCurrentLender();
 
@@ -110,8 +109,20 @@ public class LenderRulesService {
     }
 
 
+    public List<LenderRulesResponseDto> getAllRulesByLenderId(Long lenderId) {
+        Lender existingLender = lenderRepository.findById(lenderId)
+                .orElseThrow(() -> new ResourceNotFoundEx("Lender not found with id: " + lenderId));
+
+        List<LenderRules> rulesList = lenderRulesRepository.findAllByLender(existingLender);
+
+        return rulesList.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
     public LenderRulesResponseDto mapToDto(LenderRules lenderRules) {
         LenderRulesResponseDto dto = new LenderRulesResponseDto();
+        dto.setId(lenderRules.getId());
         dto.setMinimumSalary(lenderRules.getMinimumSalary());
         dto.setMinimumLoanAmount(lenderRules.getMinimumLoanAmount());
         dto.setMaximumLoanAmount(lenderRules.getMaximumLoanAmount());
