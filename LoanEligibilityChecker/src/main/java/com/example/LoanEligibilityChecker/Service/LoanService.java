@@ -43,7 +43,6 @@ public class LoanService {
                 )
                 .stream()
                 .map(rule -> LenderResponseDto.builder()
-                        .id(rule.getId())
                         .id(rule.getLender().getId())
                         .name(rule.getLender().getCompanyName())
                         .interestRate(rule.getInterestRate())

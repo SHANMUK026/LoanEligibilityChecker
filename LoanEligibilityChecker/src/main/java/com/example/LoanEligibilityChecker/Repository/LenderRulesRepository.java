@@ -27,5 +27,4 @@ public interface LenderRulesRepository extends JpaRepository<LenderRules, Long> 
 
     // Fix for LenderRulesService dependency
     List<LenderRules> findAllByLender(Lender lender);
-    LenderRules findByLenderRulesId(Long id);
 }

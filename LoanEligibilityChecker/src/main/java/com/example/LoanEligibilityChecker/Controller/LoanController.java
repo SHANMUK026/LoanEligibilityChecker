@@ -23,4 +23,6 @@ public class LoanController {
         List<LenderResponseDto> lenders = loanService.getEligibleLenders(salary);
         return ResponseEntity.ok(lenders);
     }
+
+
 }
