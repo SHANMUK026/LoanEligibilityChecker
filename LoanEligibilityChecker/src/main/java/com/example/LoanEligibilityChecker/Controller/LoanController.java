@@ -1,5 +1,6 @@
 package com.example.LoanEligibilityChecker.Controller;
 
+import com.example.LoanEligibilityChecker.Dto.LenderResponseDto;
 import com.example.LoanEligibilityChecker.Entity.BorrowerRequest;
 import com.example.LoanEligibilityChecker.Entity.Lender;
 import com.example.LoanEligibilityChecker.Service.LoanService;
@@ -18,8 +19,8 @@ public class LoanController {
 
 
     @GetMapping
-    public ResponseEntity<List<Lender>> applyLoan(@RequestParam Double salary) {
-        List<Lender> lenders = loanService.getEligibleLenders(salary);
+    public ResponseEntity<List<LenderResponseDto>> applyLoan(@RequestParam Double salary) {
+        List<LenderResponseDto> lenders = loanService.getEligibleLenders(salary);
         return ResponseEntity.ok(lenders);
     }
 }

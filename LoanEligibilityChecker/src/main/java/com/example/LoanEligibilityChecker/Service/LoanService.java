@@ -1,5 +1,6 @@
 package com.example.LoanEligibilityChecker.Service;
 
+import com.example.LoanEligibilityChecker.Dto.LenderResponseDto;
 import com.example.LoanEligibilityChecker.Entity.Borrower;
 import com.example.LoanEligibilityChecker.Entity.BorrowerRequest;
 import com.example.LoanEligibilityChecker.Entity.Lender;
@@ -27,18 +28,29 @@ public class LoanService {
                 .orElseThrow(() -> new ResourceNotFoundEx("Borrower not found with username: " + username));
     }
 
-    public List<Lender> getEligibleLenders(Double salary) {
+    public List<LenderResponseDto> getEligibleLenders(Double salary) {
         Borrower borrower = currentBorrower();
 
         BorrowerRequest request = borrowerRequestRepository.findByBorrower_Id(borrower.getId())
                 .orElseThrow(() -> new ResourceNotFoundEx("Borrower request not found for borrower id: " + borrower.getId()));
 
-        return lenderRulesRepository.findEligibleLenders(
-                salary,
-                request.getLoanAmount(),
-                request.getCreditScore(),
-                request.getAge(),
-                request.getEmploymentStatus()
-        );
+        return lenderRulesRepository.findEligibleLenderRules(
+                        salary,
+                        request.getLoanAmount(),
+                        request.getCreditScore(),
+                        request.getAge(),
+                        request.getEmploymentStatus()
+                )
+                .stream()
+                .map(rule -> LenderResponseDto.builder()
+                        .id(rule.getId())
+                        .id(rule.getLender().getId())
+                        .name(rule.getLender().getCompanyName())
+                        .interestRate(rule.getInterestRate())
+                        .minimumLoanAmount(rule.getMinimumLoanAmount())
+                        .maximumLoanAmount(rule.getMaximumLoanAmount())
+                        .build())
+                .toList();
     }
+
 }

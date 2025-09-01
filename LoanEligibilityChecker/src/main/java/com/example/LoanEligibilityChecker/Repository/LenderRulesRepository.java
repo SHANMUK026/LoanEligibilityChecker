@@ -12,19 +12,20 @@ import java.util.List;
 @Repository
 public interface LenderRulesRepository extends JpaRepository<LenderRules, Long> {
 
-    @Query("SELECT lr.lender FROM LenderRules lr " +
+    @Query("SELECT lr FROM LenderRules lr " +
             "WHERE :salary >= lr.minimumSalary " +
             "AND :loanAmount BETWEEN lr.minimumLoanAmount AND lr.maximumLoanAmount " +
             "AND :creditScore >= lr.minimumCreditScore " +
             "AND :age BETWEEN lr.minimumAge AND lr.maximumAge " +
             "AND lr.employmentTypes LIKE CONCAT('%', :employmentStatus, '%') " +
             "AND lr.ruleStatus = 'ACTIVE'")
-    List<Lender> findEligibleLenders(@Param("salary") Double salary,
-                                     @Param("loanAmount") Double loanAmount,
-                                     @Param("creditScore") int creditScore,
-                                     @Param("age") int age,
-                                     @Param("employmentStatus") String employmentStatus);
+    List<LenderRules> findEligibleLenderRules(@Param("salary") Double salary,
+                                              @Param("loanAmount") Double loanAmount,
+                                              @Param("creditScore") int creditScore,
+                                              @Param("age") int age,
+                                              @Param("employmentStatus") String employmentStatus);
 
     // Fix for LenderRulesService dependency
     List<LenderRules> findAllByLender(Lender lender);
+    LenderRules findByLenderRulesId(Long id);
 }
