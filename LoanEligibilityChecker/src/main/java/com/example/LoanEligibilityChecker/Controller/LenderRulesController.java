@@ -22,23 +22,23 @@ public class LenderRulesController {
         ResponseDto responseDto = lenderRulesService.createLenderRules(rulesRequestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
-    
+
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseDto> updateLenderRules(@PathVariable Long id,@RequestBody LenderRulesRequestDto rulesRequestDto) {
-        ResponseDto responseDto = lenderRulesService.updateLenderRules(id,rulesRequestDto);
+    public ResponseEntity<ResponseDto> updateLenderRules(@PathVariable Long id, @RequestBody LenderRulesRequestDto rulesRequestDto) {
+        ResponseDto responseDto = lenderRulesService.updateLenderRules(id, rulesRequestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<LenderRulesResponseDto> getLenderRules(@PathVariable Long id) {
         LenderRulesResponseDto responseDto = lenderRulesService.getLenderRules(id);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
-    
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteLenderRules(@PathVariable Long id) {
         ResponseDto responseDto = lenderRulesService.deleteLenderRules(id);
-        return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping
@@ -46,11 +46,16 @@ public class LenderRulesController {
         return lenderRulesService.getAllLenderRules();
     }
 
-        @GetMapping("/lender/{lenderId}")
-        public List<LenderRulesResponseDto> getRulesByLender(@PathVariable Long lenderId) {
-            return lenderRulesService.getAllRulesByLenderId(lenderId);
-        }
+    @GetMapping("/lender/{lenderId}")
+    public List<LenderRulesResponseDto> getRulesByLender(@PathVariable Long lenderId) {
+        return lenderRulesService.getAllRulesByLenderId(lenderId);
     }
+
+    @GetMapping("/my-rules")
+    public List<LenderRulesResponseDto> getMyRules() {
+        return lenderRulesService.getAllLenderRules();
+    }
+}
 
 
 
