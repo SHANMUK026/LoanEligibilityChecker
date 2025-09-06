@@ -5,8 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LoanApplicationRepository extends JpaRepository <LoanApplication, Long>{
-    List<LoanApplication> findByLender_IdAndStatus(Long id, String status);
+    List<LoanApplication> findByLender_Id(Long id);
+    Optional<LoanApplication> findByBorrowerRequest_Borrower_Id(Long id);
 }

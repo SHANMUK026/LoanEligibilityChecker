@@ -3,7 +3,6 @@ package com.example.LoanEligibilityChecker.Controller;
 import com.example.LoanEligibilityChecker.Dto.LenderResponseDto;
 import com.example.LoanEligibilityChecker.Dto.LoanApplicationResponseDto;
 import com.example.LoanEligibilityChecker.Dto.ResponseDto;
-import com.example.LoanEligibilityChecker.Entity.LoanApplication;
 import com.example.LoanEligibilityChecker.Service.LoanApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,8 +31,19 @@ public class LoanApplicationController {
         return new ResponseEntity<>(loanService.applyForLoan(lenderId), HttpStatus.CREATED);
     }
 
-    @GetMapping("/lender-applications")
+    @GetMapping("/borrower-applications")
     public ResponseEntity<List<LoanApplicationResponseDto>> getLenderApplications() {
-        return new  ResponseEntity<>(loanService.getLenderApplications(), HttpStatus.OK);
+        return new  ResponseEntity<>(loanService.getBorrowerApplications(), HttpStatus.OK);
     }
+
+    @PutMapping("/update-status/{applId}")
+    public ResponseEntity<ResponseDto> updateApplicationStatus(@PathVariable Long applId, @RequestParam String status){
+        return new ResponseEntity<>(loanService.updateLoanApplicationStatus(applId, status), HttpStatus.OK);
+    }
+
+    @GetMapping("/borrower/my-applications")
+    public ResponseEntity<LoanApplicationResponseDto> getBorrowerLoanApplication(){
+        return new ResponseEntity<>(loanService.getBorrowerLoanApplication(), HttpStatus.OK);
+    }
+
 }

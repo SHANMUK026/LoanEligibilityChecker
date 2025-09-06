@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +28,7 @@ public class Borrower {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(mappedBy = "borrower", cascade = CascadeType.ALL, orphanRemoval = true)
-    private BorrowerRequest borrowerRequest;
+    @OneToMany(mappedBy = "borrower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BorrowerRequest> borrowerRequest= new ArrayList<>();
 
 }

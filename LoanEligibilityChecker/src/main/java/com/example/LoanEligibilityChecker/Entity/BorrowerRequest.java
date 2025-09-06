@@ -25,7 +25,7 @@ public class BorrowerRequest {
     private int creditScore;
     private int age;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "borrower_id", nullable = false)
     private Borrower borrower;
 

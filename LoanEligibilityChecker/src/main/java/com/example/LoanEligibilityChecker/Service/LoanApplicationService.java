@@ -93,11 +93,25 @@ public class LoanApplicationService {
                 .orElseThrow(() -> new ResourceNotFoundEx("Lender not found with username: " + username));
     }
 
-    public List<LoanApplicationResponseDto> getLenderApplications() {
+    public List<LoanApplicationResponseDto> getBorrowerApplications() {
         Lender lender = currentLender();
-        return loanApplicationRepository.findByLender_IdAndStatus(lender.getId(),"PENDING")
+        return loanApplicationRepository.findByLender_Id(lender.getId())
                 .stream()
                 .map(this::mapToDto)
                 .toList();
+    }
+
+    public ResponseDto updateLoanApplicationStatus(Long id, String status){
+        LoanApplication loanApplication = loanApplicationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundEx("Loan application not found with id: " + id));
+        loanApplication.setStatus(status);
+        loanApplicationRepository.save(loanApplication);
+        return new ResponseDto("Loan application status updated successfully with id: " + id);
+    }
+
+    public LoanApplicationResponseDto getBorrowerLoanApplication(){
+        LoanApplication loanApplication=loanApplicationRepository.findByBorrowerRequest_Borrower_Id(currentBorrower().getId())
+                .orElseThrow(() -> new ResourceNotFoundEx("Loan application not found for borrower id: " + currentBorrower().getId()));
+        return mapToDto(loanApplication);
     }
 }

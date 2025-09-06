@@ -76,8 +76,6 @@ public class UserService {
 
         return new AuthResponseDto(token, user.getRole());
 
-
-
     }
 
 }
