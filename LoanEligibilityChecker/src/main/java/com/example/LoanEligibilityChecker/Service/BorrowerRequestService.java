@@ -1,7 +1,6 @@
 package com.example.LoanEligibilityChecker.Service;
 
 import com.example.LoanEligibilityChecker.Dto.BorrowerReqRequestDto;
-import com.example.LoanEligibilityChecker.Dto.BorrowerRequestDto;
 import com.example.LoanEligibilityChecker.Dto.BorrowerRequestResponseDto;
 import com.example.LoanEligibilityChecker.Dto.ResponseDto;
 import com.example.LoanEligibilityChecker.Entity.Borrower;
@@ -12,6 +11,8 @@ import com.example.LoanEligibilityChecker.Repository.BorrowerRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -53,12 +54,12 @@ public class BorrowerRequestService {
         BorrowerRequest savedRequest=borrowerRequestRepository.save(borrowerRequest);
         return new ResponseDto("Borrower request created successfully with id: " + savedRequest.getId());
     }
-    public BorrowerRequestResponseDto getBorrowerRequest(){
+    public List<BorrowerRequestResponseDto> getBorrowerRequest(){
         Borrower existingBorrower=currentBorrower();
 
-        BorrowerRequest savedBorrowerReq= borrowerRequestRepository.findByBorrower_User_UserName(existingBorrower.getUser().getUserName())
-                .orElseThrow(() -> new ResourceNotFoundEx("Borrower request not found for borrower: " + existingBorrower.getUser().getUserName()));
-
-        return mapToDto(savedBorrowerReq);
+        return  borrowerRequestRepository.findByBorrower_User_UserName(existingBorrower.getUser().getUserName())
+                .stream()
+                .map(this::mapToDto)
+                .toList();
     }
 }

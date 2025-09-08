@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/borrower_request")
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class BorrowerRequestController {
     }
 
     @GetMapping
-    public ResponseEntity<BorrowerRequestResponseDto> getBorrowerRequest(){
+    public ResponseEntity<List<BorrowerRequestResponseDto>> getBorrowerRequest(){
         return new ResponseEntity<>(borrowerRequestService.getBorrowerRequest(), HttpStatus.OK);
     }
 
