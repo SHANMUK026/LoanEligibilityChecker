@@ -7,6 +7,7 @@ import com.example.LoanEligibilityChecker.Dto.ResponseDto;
 import com.example.LoanEligibilityChecker.Entity.*;
 import com.example.LoanEligibilityChecker.Exception.ResourceNotFoundEx;
 import com.example.LoanEligibilityChecker.Repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -126,9 +127,25 @@ public class LoanApplicationService {
                 .toList();
     }
 
+    @Transactional
     public ResponseDto updateLoanApplicationStatus(Long id, String status){
         LoanApplication loanApplication = loanApplicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundEx("Loan application not found with id: " + id));
+
+        if ("APPROVED".equalsIgnoreCase(status)) {
+            Long requestId = loanApplication.getBorrowerRequest().getId();
+
+            List<LoanApplication> loanApplications =
+                    loanApplicationRepository.findByBorrowerRequest_Id(requestId);
+
+            for (LoanApplication app : loanApplications) {
+                if (!app.getId().equals(loanApplication.getId())) {
+                    app.setStatus("REJECTED");
+                }
+            }
+            loanApplicationRepository.saveAll(loanApplications);
+        }
+
         loanApplication.setStatus(status);
         loanApplicationRepository.save(loanApplication);
         return new ResponseDto("Loan application status updated successfully with id: " + id);
