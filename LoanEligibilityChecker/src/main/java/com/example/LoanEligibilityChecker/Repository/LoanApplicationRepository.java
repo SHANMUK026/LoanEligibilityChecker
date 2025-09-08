@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface LoanApplicationRepository extends JpaRepository <LoanApplication, Long>{
-    List<LoanApplication> findByLender_Id(Long id);
+    List<LoanApplication> findByRules_Lender_Id(Long id);
     Optional<LoanApplication> findByBorrowerRequest_Borrower_Id(Long id);
+    Optional<LoanApplication> findByBorrowerRequest_IdAndRules_Id(Long reqId, Long ruleId);
 }

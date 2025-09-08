@@ -1,10 +1,14 @@
 package com.example.LoanEligibilityChecker.Entity;
 
+import com.example.LoanEligibilityChecker.Dto.LenderRulesResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -30,5 +34,6 @@ public class LenderRules {
     @JoinColumn(name = "lender_id", nullable = false)
     private Lender lender;
 
-
+    @OneToMany(mappedBy = "rules", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LoanApplication> loanApplications=new ArrayList<>();
 }

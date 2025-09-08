@@ -20,15 +20,15 @@ public class LoanApplicationController {
 
 
 
-    @GetMapping("/eligible-lenders")
-    public ResponseEntity<List<LenderResponseDto>> getEligibleLoans(@RequestParam Double salary) {
-            List<LenderResponseDto> lenders = loanService.getEligibleLenders(salary);
+    @GetMapping("/{reqId}/eligible-lenders")
+    public ResponseEntity<List<LenderResponseDto>> getEligibleLoans(@PathVariable Long reqId,@RequestParam Double salary) {
+            List<LenderResponseDto> lenders = loanService.getEligibleLenders(reqId,salary);
         return ResponseEntity.ok(lenders);
     }
 
-    @PostMapping("/apply/{lenderId}")
-    public ResponseEntity<ResponseDto> applyLoan(@PathVariable Long lenderId){
-        return new ResponseEntity<>(loanService.applyForLoan(lenderId), HttpStatus.CREATED);
+    @PostMapping("/apply/{reqId}/{ruleId}")
+    public ResponseEntity<ResponseDto> applyLoan(@PathVariable Long reqId,@PathVariable Long ruleId){
+        return new ResponseEntity<>(loanService.applyForLoan(reqId, ruleId), HttpStatus.CREATED);
     }
 
     @GetMapping("/borrower-applications")

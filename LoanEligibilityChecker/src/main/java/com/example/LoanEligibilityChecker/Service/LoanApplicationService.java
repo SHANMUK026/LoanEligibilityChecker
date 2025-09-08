@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class LoanApplicationService {
     private final BorrowerRequestRepository borrowerRequestRepository;
     private final BorrowerRepository borrowerRepository;
     private final LenderRepository lenderRepository;
+    private final LenderRulesRepository lenderRulesRepo;
     private final LoanApplicationRepository loanApplicationRepository;
 
     private Borrower currentBorrower() {
@@ -44,11 +46,10 @@ public class LoanApplicationService {
 
     }
 
-    public List<LenderResponseDto> getEligibleLenders(Double salary) {
-        Borrower borrower = currentBorrower();
+    public List<LenderResponseDto> getEligibleLenders(Long reqId,Double salary) {
 
-        BorrowerRequest request = borrowerRequestRepository.findByBorrower_Id(borrower.getId())
-                .orElseThrow(() -> new ResourceNotFoundEx("Borrower request not found for borrower id: " + borrower.getId()));
+        BorrowerRequest request = borrowerRequestRepository.findById(reqId)
+                .orElseThrow(() -> new ResourceNotFoundEx("Borrower request not found for id: " + reqId));
 
         return lenderRulesRepository.findEligibleLenderRules(
                         salary,
@@ -69,17 +70,24 @@ public class LoanApplicationService {
                 .toList();
     }
 
-    public ResponseDto applyForLoan(Long lenderId){
-        Borrower borrower = currentBorrower();
-        BorrowerRequest request = borrowerRequestRepository.findByBorrower_Id(borrower.getId())
-                .orElseThrow(() -> new ResourceNotFoundEx("Borrower request not found for borrower id: " + borrower.getId()));
+    public ResponseDto applyForLoan(Long reqId,Long ruleId){
 
-        Lender lender = lenderRepository.findById(lenderId)
-                .orElseThrow(() -> new ResourceNotFoundEx("Lender not found with id: " + lenderId));
+        Optional<LoanApplication> application=loanApplicationRepository.findByBorrowerRequest_IdAndRules_Id(reqId, ruleId);
+
+        if(application.isPresent()){
+            throw new ResourceNotFoundEx("You have already applied for this loan");
+        }
+
+        BorrowerRequest request = borrowerRequestRepository.findById(reqId)
+                .orElseThrow(() -> new ResourceNotFoundEx("Borrower request not found for id: " + reqId));
+
+        LenderRules rule=lenderRulesRepository.findById(ruleId)
+                .orElseThrow(() -> new ResourceNotFoundEx("Rule not found with id: " + ruleId));
+
 
         LoanApplication loanApplication= LoanApplication.builder()
                 .borrowerRequest(request)
-                .lender(lender)
+                .rules(rule)
                 .status("PENDING")
                 .build();
 
@@ -95,7 +103,7 @@ public class LoanApplicationService {
 
     public List<LoanApplicationResponseDto> getBorrowerApplications() {
         Lender lender = currentLender();
-        return loanApplicationRepository.findByLender_Id(lender.getId())
+        return loanApplicationRepository.findByRules_Lender_Id(lender.getId())
                 .stream()
                 .map(this::mapToDto)
                 .toList();

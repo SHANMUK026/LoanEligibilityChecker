@@ -33,6 +33,4 @@ public class Lender {
     @OneToMany(mappedBy = "lender", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LenderRules> lenderRules = new ArrayList<>();
 
-    @OneToMany(mappedBy = "lender", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LoanApplication> loanApplications = new ArrayList<>();
 }

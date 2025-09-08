@@ -24,8 +24,8 @@ public class LoanApplication {
     private BorrowerRequest borrowerRequest;
 
     @ManyToOne
-    @JoinColumn(name = "lender_id", nullable = false)
-    private Lender lender;
+    @JoinColumn(name = "rule_id", nullable = false)
+    private LenderRules rules;
 
     private String status;
 
