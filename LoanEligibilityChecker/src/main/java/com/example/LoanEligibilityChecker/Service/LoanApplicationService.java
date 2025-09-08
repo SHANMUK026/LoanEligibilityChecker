@@ -1,5 +1,6 @@
 package com.example.LoanEligibilityChecker.Service;
 
+import com.example.LoanEligibilityChecker.Dto.BorrowerLoanApplicationDto;
 import com.example.LoanEligibilityChecker.Dto.LenderResponseDto;
 import com.example.LoanEligibilityChecker.Dto.LoanApplicationResponseDto;
 import com.example.LoanEligibilityChecker.Dto.ResponseDto;
@@ -45,6 +46,22 @@ public class LoanApplicationService {
         return dto;
 
     }
+
+
+    public BorrowerLoanApplicationDto mapToBorrowerDto(LoanApplication loanApplication){
+        BorrowerLoanApplicationDto response= new BorrowerLoanApplicationDto();
+
+        response.setLoanApplicationId(loanApplication.getId());
+        response.setBorrowerName(loanApplication.getBorrowerRequest().getBorrower().getFirstName());
+        response.setStatus(loanApplication.getStatus());
+        response.setLoanPurpose(loanApplication.getBorrowerRequest().getLoanPurpose());
+        response.setLoanAmount(loanApplication.getBorrowerRequest().getLoanAmount());
+        response.setInterestRate(loanApplication.getRules().getInterestRate());
+        response.setLenderCompanyName(loanApplication.getRules().getLender().getCompanyName());
+        return response;
+    }
+
+
 
     public List<LenderResponseDto> getEligibleLenders(Long reqId,Double salary) {
 
@@ -117,9 +134,11 @@ public class LoanApplicationService {
         return new ResponseDto("Loan application status updated successfully with id: " + id);
     }
 
-    public LoanApplicationResponseDto getBorrowerLoanApplication(){
-        LoanApplication loanApplication=loanApplicationRepository.findByBorrowerRequest_Borrower_Id(currentBorrower().getId())
-                .orElseThrow(() -> new ResourceNotFoundEx("Loan application not found for borrower id: " + currentBorrower().getId()));
-        return mapToDto(loanApplication);
+    public List<BorrowerLoanApplicationDto> getBorrowerLoanApplication(){
+        return loanApplicationRepository.findByBorrowerRequest_Borrower_Id(currentBorrower().getId())
+                .stream()
+                .map(this::mapToBorrowerDto)
+                .toList();
+
     }
 }

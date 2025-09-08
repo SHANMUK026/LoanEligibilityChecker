@@ -1,5 +1,6 @@
 package com.example.LoanEligibilityChecker.Controller;
 
+import com.example.LoanEligibilityChecker.Dto.BorrowerLoanApplicationDto;
 import com.example.LoanEligibilityChecker.Dto.LenderResponseDto;
 import com.example.LoanEligibilityChecker.Dto.LoanApplicationResponseDto;
 import com.example.LoanEligibilityChecker.Dto.ResponseDto;
@@ -26,7 +27,7 @@ public class LoanApplicationController {
         return ResponseEntity.ok(lenders);
     }
 
-    @PostMapping("/apply/{reqId}/{ruleId}")
+    @PostMapping("/apply/request/{reqId}/rule/{ruleId}")
     public ResponseEntity<ResponseDto> applyLoan(@PathVariable Long reqId,@PathVariable Long ruleId){
         return new ResponseEntity<>(loanService.applyForLoan(reqId, ruleId), HttpStatus.CREATED);
     }
@@ -42,7 +43,7 @@ public class LoanApplicationController {
     }
 
     @GetMapping("/borrower/my-applications")
-    public ResponseEntity<LoanApplicationResponseDto> getBorrowerLoanApplication(){
+    public ResponseEntity<List<BorrowerLoanApplicationDto>> getBorrowerLoanApplication(){
         return new ResponseEntity<>(loanService.getBorrowerLoanApplication(), HttpStatus.OK);
     }
 
