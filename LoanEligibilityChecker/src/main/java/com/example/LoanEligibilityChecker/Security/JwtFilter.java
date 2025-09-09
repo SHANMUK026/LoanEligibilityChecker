@@ -29,7 +29,8 @@ public class JwtFilter extends OncePerRequestFilter {
         final String token;
         final String username;
 
-        if(authorizationHeader==null || !authorizationHeader.startsWith("Bearer ")){
+        if(authorizationHeader==null || !authorizationHeader.startsWith("Bearer ") || authorizationHeader.length() <= 7
+                || authorizationHeader.substring(7).equalsIgnoreCase("null")){
             filterChain.doFilter(request,response);
             return;
         }

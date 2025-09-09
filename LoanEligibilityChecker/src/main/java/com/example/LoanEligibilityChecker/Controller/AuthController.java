@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
     private final UserService userService;
+
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> registerUser(@RequestBody UserRequestDto requestDto) {
         return new ResponseEntity<>(userService.registerUser(requestDto), HttpStatus.CREATED);
