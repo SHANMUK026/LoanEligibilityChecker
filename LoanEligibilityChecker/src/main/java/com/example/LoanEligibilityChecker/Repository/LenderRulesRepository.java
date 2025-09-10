@@ -17,8 +17,8 @@ public interface LenderRulesRepository extends JpaRepository<LenderRules, Long> 
             "AND :loanAmount BETWEEN lr.minimumLoanAmount AND lr.maximumLoanAmount " +
             "AND :creditScore >= lr.minimumCreditScore " +
             "AND :age BETWEEN lr.minimumAge AND lr.maximumAge " +
-            "AND lr.employmentTypes LIKE CONCAT('%', :employmentStatus, '%') " +
-            "AND lr.ruleStatus = 'ACTIVE'")
+            "AND LOWER(lr.employmentTypes) LIKE CONCAT('%', LOWER(:employmentStatus), '%') " +
+            "AND LOWER(lr.ruleStatus) = 'active'")
     List<LenderRules> findEligibleLenderRules(@Param("salary") Double salary,
                                               @Param("loanAmount") Double loanAmount,
                                               @Param("creditScore") int creditScore,
