@@ -8,5 +8,6 @@ public class BorrowerReqRequestDto {
     private String loanPurpose;
     private String employmentStatus;
     private int creditScore;
+    private double salary;
     private int age;
 }

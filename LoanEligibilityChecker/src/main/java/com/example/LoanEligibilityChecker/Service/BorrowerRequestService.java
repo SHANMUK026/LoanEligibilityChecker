@@ -36,6 +36,7 @@ public class BorrowerRequestService {
         borrowerRequestResponseDto.setLoanAmount(borrowerRequest.getLoanAmount());
         borrowerRequestResponseDto.setLoanPurpose(borrowerRequest.getLoanPurpose());
         borrowerRequestResponseDto.setId(borrowerRequest.getId());
+        borrowerRequestResponseDto.setSalary(borrowerRequest.getSalary());
         return borrowerRequestResponseDto;
     }
 
@@ -49,7 +50,9 @@ public class BorrowerRequestService {
                 .loanPurpose(borrowerRequestDto.getLoanPurpose())
                 .creditScore(borrowerRequestDto.getCreditScore())
                 .employmentStatus(borrowerRequestDto.getEmploymentStatus())
-                .borrower(existingBorrower).build();
+                .borrower(existingBorrower)
+                .salary(borrowerRequestDto.getSalary())
+                .build();
 
         BorrowerRequest savedRequest=borrowerRequestRepository.save(borrowerRequest);
         return new ResponseDto("Borrower request created successfully with id: " + savedRequest.getId());

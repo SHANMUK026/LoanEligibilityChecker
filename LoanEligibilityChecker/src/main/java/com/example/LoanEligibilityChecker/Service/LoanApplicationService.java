@@ -64,13 +64,13 @@ public class LoanApplicationService {
 
 
 
-    public List<LenderResponseDto> getEligibleLenders(Long reqId,Double salary) {
+    public List<LenderResponseDto> getEligibleLenders(Long reqId) {
 
         BorrowerRequest request = borrowerRequestRepository.findById(reqId)
                 .orElseThrow(() -> new ResourceNotFoundEx("Borrower request not found for id: " + reqId));
 
         return lenderRulesRepository.findEligibleLenderRules(
-                        salary,
+                        request.getSalary(),
                         request.getLoanAmount(),
                         request.getCreditScore(),
                         request.getAge(),

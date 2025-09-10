@@ -24,6 +24,7 @@ public class BorrowerRequest {
     private String employmentStatus;
     private int creditScore;
     private int age;
+    private double salary;
 
     @ManyToOne
     @JoinColumn(name = "borrower_id", nullable = false)

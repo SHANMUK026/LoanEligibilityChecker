@@ -22,8 +22,8 @@ public class LoanApplicationController {
 
 
     @GetMapping("/{reqId}/eligible-lenders")
-    public ResponseEntity<List<LenderResponseDto>> getEligibleLoans(@PathVariable Long reqId,@RequestParam Double salary) {
-            List<LenderResponseDto> lenders = loanService.getEligibleLenders(reqId,salary);
+    public ResponseEntity<List<LenderResponseDto>> getEligibleLoans(@PathVariable Long reqId) {
+            List<LenderResponseDto> lenders = loanService.getEligibleLenders(reqId);
         return ResponseEntity.ok(lenders);
     }
 

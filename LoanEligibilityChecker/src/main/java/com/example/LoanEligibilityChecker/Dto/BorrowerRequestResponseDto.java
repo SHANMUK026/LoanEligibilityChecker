@@ -11,4 +11,5 @@ public class BorrowerRequestResponseDto {
     private String employmentStatus;
     private int creditScore;
     private int age;
+    private double salary;
 }

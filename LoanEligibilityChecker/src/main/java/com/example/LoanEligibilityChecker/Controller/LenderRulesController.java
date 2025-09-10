@@ -19,6 +19,7 @@ public class LenderRulesController {
 
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createLenderRules(@RequestBody LenderRulesRequestDto rulesRequestDto) {
+
         ResponseDto responseDto = lenderRulesService.createLenderRules(rulesRequestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
