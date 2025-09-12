@@ -36,7 +36,6 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // allow preflight OPTIONS for all endpoints
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/register", "/auth/login").permitAll()
                         .anyRequest().authenticated()
@@ -60,23 +59,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-
-        // allow your frontend origin; use patterns if needed
         config.setAllowedOriginPatterns(List.of("http://localhost:4200"));
         config.setAllowCredentials(true);
-
-        // allow methods and required headers (include Authorization)
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "X-Requested-With"));
-
-        // expose headers to browser if needed
         config.setExposedHeaders(List.of("Authorization", "Content-Type"));
-
-        // preflight cache duration
         config.setMaxAge(3600L);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // register for all paths
         source.registerCorsConfiguration("/**", config);
         return source;
     }
