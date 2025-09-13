@@ -56,26 +56,17 @@ public class UserService {
         return new ResponseDto("User registered successfully");
     }
 
-
     public AuthResponseDto loginUser(AuthRequestDto authRequestDto){
-
-
         try{
-
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequestDto.getUserName(),authRequestDto.getPassword())
             );
-
-
         }catch (Exception e){
             throw new InvalidCredentials("Invalid username or password");
         }
-
         User user=userRepository.findByUserName(authRequestDto.getUserName()).get();
         String token=jwtUtil.generateJwtToken(user.getUserName());
-
         return new AuthResponseDto(token, user.getRole());
-
     }
 
 }
