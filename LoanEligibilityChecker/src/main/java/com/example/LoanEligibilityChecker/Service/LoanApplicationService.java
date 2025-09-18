@@ -135,6 +135,8 @@ public class LoanApplicationService {
         if ("APPROVED".equalsIgnoreCase(status)) {
             Long requestId = loanApplication.getBorrowerRequest().getId();
 
+            loanApplication.getBorrowerRequest().setFulfilled(true);
+
             List<LoanApplication> loanApplications =
                     loanApplicationRepository.findByBorrowerRequest_Id(requestId);
 

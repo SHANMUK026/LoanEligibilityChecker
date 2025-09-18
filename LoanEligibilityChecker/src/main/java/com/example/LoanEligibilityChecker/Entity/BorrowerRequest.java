@@ -26,6 +26,8 @@ public class BorrowerRequest {
     private int age;
     private double salary;
 
+    private boolean fulfilled;
+
     @ManyToOne
     @JoinColumn(name = "borrower_id", nullable = false)
     private Borrower borrower;

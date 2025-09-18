@@ -51,6 +51,7 @@ public class BorrowerRequestService {
                 .creditScore(borrowerRequestDto.getCreditScore())
                 .employmentStatus(borrowerRequestDto.getEmploymentStatus())
                 .borrower(existingBorrower)
+                .fulfilled(false)
                 .salary(borrowerRequestDto.getSalary())
                 .build();
 
